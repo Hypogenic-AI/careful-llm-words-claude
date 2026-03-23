@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "stages": {
+    "resource_finder": {
+      "success": true,
+      "completion_marker": "/workspaces/careful-llm-words-claude/.resource_finder_complete",
+      "outputs": {
+        "literature_review": "/workspaces/careful-llm-words-claude/literature_review.md",
+        "resources_catalog": "/workspaces/careful-llm-words-claude/resources.md",
+        "papers_dir": "/workspaces/careful-llm-words-claude/papers",
+        "datasets_dir": "/workspaces/careful-llm-words-claude/datasets",
+        "code_dir": "/workspaces/careful-llm-words-claude/code"
+      },
+      "log_file": "/workspaces/careful-llm-words-claude/logs/resource_finder_claude.log",
+      "transcript_file": "/workspaces/careful-llm-words-claude/logs/resource_finder_claude_transcript.jsonl",
+      "elapsed_time": 1239.6690270900726
+    },
+    "experiment_runner": {
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 4073.807425737381,
+      "log_file": "/workspaces/careful-llm-words-claude/logs/execution_claude.log",
+      "transcript_file": "/workspaces/careful-llm-words-claude/logs/execution_claude_transcript.jsonl"
+    }
+  },
+  "work_dir": "/workspaces/careful-llm-words-claude"
+}

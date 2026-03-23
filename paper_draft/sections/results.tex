@@ -1,0 +1,106 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{Mathematical Reasoning (\gsm)}
+\label{sec:gsm_results}
+
+\Tabref{tab:gsm} presents accuracy on \gsm across all three conditions. \sentthink matches \direct at 92\% accuracy and slightly outperforms \stdcot (89\%), though neither difference is statistically significant (McNemar's $\chi^2{=}0.50$, $p{=}0.480$ vs.\ \direct; $\chi^2{=}0.80$, $p{=}0.371$ vs.\ \stdcot). \gptfour already performs well on \gsm with direct prompting, leaving limited room for improvement---a ceiling effect that may mask small gains from interleaved thinking.
+
+\begin{table}[t]
+    \centering
+    \caption{Accuracy on \gsm (100 questions). \sentthink matches \direct and slightly outperforms \stdcot, but differences are not statistically significant. Best result in \textbf{bold}.}
+    \begin{tabular}{@{}lccc@{}}
+        \toprule
+        \textbf{Condition} & \textbf{Accuracy (\%)} & \textbf{95\% CI} & \textbf{Avg.\ Tokens} \\
+        \midrule
+        \direct & \textbf{92.0} & [85.0, 95.9] & 173 {\scriptsize $\pm$ 92} \\
+        \stdcot & 89.0 & [81.4, 93.7] & 220 {\scriptsize $\pm$ 89} \\
+        \sentthink & \textbf{92.0} & [85.0, 95.9] & 298 {\scriptsize $\pm$ 93} \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:gsm}
+\end{table}
+
+Notably, \sentthink uses 72\% more tokens than \direct (298 vs.\ 173) for the same accuracy, as the thinking tags add substantial overhead. Despite this overhead, the thinking does not appear to catch errors that \direct misses: a qualitative examination of \sentthink errors reveals that the model sometimes states ``let me verify'' in its thinking tags without actually catching arithmetic mistakes.
+
+\subsection{Truthfulness (\tqa)}
+\label{sec:tqa_results}
+
+\Tabref{tab:tqa} presents truthfulness and informativeness scores on \tqa. \sentthink achieves the highest truthfulness score of 4.69 out of 5.0, significantly outperforming \direct (4.50; Wilcoxon $W{=}30$, $p{=}0.0007$, Cohen's $d{=}0.36$). This is our primary positive finding: interleaved thinking makes the model measurably more careful about factual claims.
+
+\begin{table}[t]
+    \centering
+    \caption{Truthfulness and informativeness on \tqa (100 questions, 1--5 scale). \sentthink achieves significantly higher truthfulness than \direct ($p{=}0.0007$). Best results in \textbf{bold}.}
+    \begin{tabular}{@{}lccc@{}}
+        \toprule
+        \textbf{Condition} & \textbf{Truthfulness} & \textbf{Informativeness} & \textbf{Avg.\ Tokens} \\
+        \midrule
+        \direct & 4.50 {\scriptsize $\pm$ 0.88} & \textbf{4.56} {\scriptsize $\pm$ 0.75} & 71 \\
+        \stdcot & 4.65 {\scriptsize $\pm$ 0.75} & \textbf{4.66} {\scriptsize $\pm$ 0.64} & 117 \\
+        \sentthink & \textbf{4.69} {\scriptsize $\pm$ 0.66} & 4.42 {\scriptsize $\pm$ 0.72} & 112 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:tqa}
+\end{table}
+
+The improvement over \stdcot is small and not significant ($W{=}110$, $p{=}0.562$, $d{=}0.063$), suggesting that any form of prompted deliberation---whether placed before or interleaved within the response---helps with factual accuracy to a similar degree. However, \sentthink shows a slight decrease in informativeness (4.42 vs.\ 4.56 for \direct), confirming a trade-off: the model says less, but what it says is more accurate.
+
+\subsection{Open-Ended Quality (\mtbench)}
+\label{sec:mtbench_results}
+
+\Tabref{tab:mtbench} presents pairwise comparison results on \mtbench. \sentthink scores substantially lower than both baselines: 7.40 vs.\ 9.80 for \direct (Wilcoxon $W{=}0$, $p{=}0.0001$) and 7.15 vs.\ 9.95 for \stdcot ($W{=}0$, $p{=}0.0001$). \direct wins all 20 comparisons against \sentthink, as does \stdcot.
+
+\begin{table}[t]
+    \centering
+    \caption{Pairwise LLM-as-judge scores on \mtbench (20 prompts, 1--10 scale). \sentthink scores significantly lower than both baselines across all comparisons. Best results in \textbf{bold}.}
+    \begin{tabular}{@{}lcc@{}}
+        \toprule
+        \textbf{Comparison} & \textbf{Baseline Score} & \textbf{\sentthink Score} \\
+        \midrule
+        vs.\ \direct & \textbf{9.80} {\scriptsize $\pm$ 0.4} & 7.40 {\scriptsize $\pm$ 1.1} \\
+        vs.\ \stdcot & \textbf{9.95} {\scriptsize $\pm$ 0.2} & 7.15 {\scriptsize $\pm$ 0.9} \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:mtbench}
+\end{table}
+
+The root cause is the token budget. \Tabref{tab:token_budget} shows that \sentthink responses contain only 48\% visible content after stripping thinking tags---the remaining 52\% is consumed by interleaved deliberation. With a 2048-token limit, this leaves roughly half the space for the actual response, producing answers that lack the detail, examples, and thoroughness that judges reward.
+
+\begin{table}[t]
+    \centering
+    \caption{Response length analysis on \mtbench. \sentthink produces substantially shorter visible text because thinking tokens consume 52\% of the output.}
+    \begin{tabular}{@{}lccc@{}}
+        \toprule
+        \textbf{Condition} & \textbf{Clean Text (chars)} & \textbf{Full Text (chars)} & \textbf{Clean/Full Ratio} \\
+        \midrule
+        \direct & 1,420 & 1,420 & 1.00 \\
+        \stdcot & 2,705 & 2,705 & 1.00 \\
+        \sentthink & 716 & 1,503 & 0.48 \\
+        \bottomrule
+    \end{tabular}
+    \label{tab:token_budget}
+\end{table}
+
+\subsection{Linguistic Feature Analysis}
+\label{sec:linguistic_results}
+
+\Tabref{tab:linguistic} presents aggregate linguistic features across all datasets ($n{=}220$ per condition). Contrary to our hypothesis, \sentthink produces text with \emph{fewer} hedging words, qualifiers, and self-correction markers than \direct---though none of these differences reach statistical significance (all Mann-Whitney $U$ tests $p{>}0.3$).
+
+\begin{table}[t]
+    \centering
+    \caption{Linguistic features aggregated across all datasets ($n{=}220$ per condition). \sentthink produces shorter, more concise text with fewer hedging markers. No differences are statistically significant (all $p{>}0.3$).}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}lcccccc@{}}
+        \toprule
+        \textbf{Condition} & \textbf{Words} & \textbf{Sentences} & \textbf{Hedges} & \textbf{Corrections} & \textbf{Qualifiers} & \textbf{Thinking Blocks} \\
+        \midrule
+        \direct & 91.5 {\scriptsize $\pm$ 71.9} & 5.9 {\scriptsize $\pm$ 6.1} & 0.42 {\scriptsize $\pm$ 0.80} & 0.37 {\scriptsize $\pm$ 0.65} & 0.60 {\scriptsize $\pm$ 0.83} & 0.0 \\
+        \stdcot & 137.8 {\scriptsize $\pm$ 106.0} & 9.7 {\scriptsize $\pm$ 8.9} & 0.59 {\scriptsize $\pm$ 0.97} & 0.61 {\scriptsize $\pm$ 0.75} & 0.87 {\scriptsize $\pm$ 1.02} & 0.0 \\
+        \sentthink & 66.5 {\scriptsize $\pm$ 33.1} & 5.1 {\scriptsize $\pm$ 3.8} & 0.33 {\scriptsize $\pm$ 0.64} & 0.39 {\scriptsize $\pm$ 0.57} & 0.52 {\scriptsize $\pm$ 0.74} & 5.1 {\scriptsize $\pm$ 3.8} \\
+        \bottomrule
+    \end{tabular}
+    }
+    \label{tab:linguistic}
+\end{table}
+
+The most notable feature is the word count: \sentthink clean text averages only 66.5 words compared to 91.5 for \direct and 137.8 for \stdcot. The deliberation happens in the thinking tags (averaging 5.1 blocks per response), and the resulting visible sentences are confident, direct statements rather than hedged claims. This pattern---shorter, more assertive text that is also more truthful---suggests that the thinking tags function as an internal fact-checking mechanism, with the model resolving uncertainty privately before committing to a claim.

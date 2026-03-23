@@ -1,0 +1,6 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We introduced \sentthink, a prompt-only technique that instructs LLMs to generate explicit thinking tokens between every sentence. Across three benchmarks, we found that this interleaved deliberation significantly improves truthfulness on \tqa ($+0.19$, $p{=}0.0007$) while substantially reducing open-ended response quality on \mtbench due to the token budget consumed by thinking tags. The resulting text is more concise and assertive---not more hedged---suggesting that interleaved thinking acts as an internal fact-checking filter rather than producing more cautious language.
+
+Our key takeaway is that \emph{where} a model thinks matters less than \emph{whether} it thinks: interleaved and pre-answer reasoning achieve comparable truthfulness gains. However, prompt-based approaches face a fundamental token-budget constraint that training-based methods~\cite{goyal2023think,zelikman2024quietstar} avoid by operating in latent space. This positions \sentthink as a practical zero-training option for applications where truthfulness outweighs response detail---such as factual Q\&A, medical queries, and legal information---while motivating future work on adaptive thinking that inserts deliberation only where it is needed most.

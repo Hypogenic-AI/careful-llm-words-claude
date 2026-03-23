@@ -1,0 +1,263 @@
+{
+  "gsm8k": {
+    "direct": {
+      "accuracy": 0.92,
+      "ci_low": 0.8500173312059693,
+      "ci_high": 0.9589070305141891,
+      "n_correct": 92,
+      "n_total": 100,
+      "avg_output_tokens": 173.36,
+      "std_output_tokens": 91.52753902514806
+    },
+    "cot": {
+      "accuracy": 0.89,
+      "ci_low": 0.8136853697209697,
+      "ci_high": 0.9374586804477488,
+      "n_correct": 89,
+      "n_total": 100,
+      "avg_output_tokens": 220.12,
+      "std_output_tokens": 88.99407620735214
+    },
+    "sentence_thinking": {
+      "accuracy": 0.92,
+      "ci_low": 0.8500173312059693,
+      "ci_high": 0.9589070305141891,
+      "n_correct": 92,
+      "n_total": 100,
+      "avg_output_tokens": 298.02,
+      "std_output_tokens": 93.43125601210764
+    },
+    "mcnemar_st_vs_direct": {
+      "a": 1,
+      "b": 1,
+      "chi2": 0.5,
+      "p": 0.47950012218695337
+    },
+    "mcnemar_st_vs_cot": {
+      "a": 4,
+      "b": 1,
+      "chi2": 0.8,
+      "p": 0.37109336952269756
+    }
+  },
+  "truthfulqa": {
+    "direct": {
+      "truthfulness_mean": 4.5,
+      "truthfulness_std": 0.8774964387392122,
+      "informativeness_mean": 4.56,
+      "informativeness_std": 0.7525955088890712,
+      "avg_output_tokens": 71.06
+    },
+    "cot": {
+      "truthfulness_mean": 4.65,
+      "truthfulness_std": 0.7533259586659682,
+      "informativeness_mean": 4.66,
+      "informativeness_std": 0.6359245238233858,
+      "avg_output_tokens": 116.79
+    },
+    "sentence_thinking": {
+      "truthfulness_mean": 4.69,
+      "truthfulness_std": 0.6587108622149783,
+      "informativeness_mean": 4.42,
+      "informativeness_std": 0.7236021006050218,
+      "avg_output_tokens": 111.83
+    },
+    "wilcoxon_truth_st_vs_direct": {
+      "statistic": 30.0,
+      "p": 0.0006748578103641734,
+      "effect_size_d": 0.3630425966476246
+    },
+    "wilcoxon_truth_st_vs_cot": {
+      "statistic": 109.5,
+      "p": 0.5619780440945317,
+      "effect_size_d": 0.06337242505244779
+    }
+  },
+  "mtbench": {
+    "vs_direct": {
+      "direct_mean": 9.8,
+      "st_mean": 7.4,
+      "diff_mean": -2.4,
+      "diff_std": 1.1575836902790226,
+      "wilcoxon_W": 0.0,
+      "wilcoxon_p": 7.347754715733e-05,
+      "st_wins": 0,
+      "ties": 0,
+      "st_loses": 20
+    },
+    "vs_cot": {
+      "cot_mean": 9.95,
+      "st_mean": 7.15,
+      "diff_mean": -2.8,
+      "diff_std": 0.9797958971132712,
+      "wilcoxon_W": 0.0,
+      "wilcoxon_p": 6.071493947184887e-05,
+      "st_wins": 0,
+      "ties": 0,
+      "st_loses": 20
+    },
+    "linguistic_features": {
+      "direct": {
+        "sentence_count": {
+          "mean": 15.95,
+          "std": 11.616690578645882
+        },
+        "word_count": {
+          "mean": 218.2,
+          "std": 137.5156718341586
+        },
+        "hedge_count": {
+          "mean": 1.05,
+          "std": 1.4654350889752847
+        },
+        "correction_count": {
+          "mean": 0.9,
+          "std": 0.9949874371066201
+        },
+        "qualifier_count": {
+          "mean": 0.95,
+          "std": 1.2835497652993437
+        },
+        "thinking_blocks": {
+          "mean": 0.0,
+          "std": 0.0
+        }
+      },
+      "cot": {
+        "sentence_count": {
+          "mean": 30.1,
+          "std": 14.173566946961516
+        },
+        "word_count": {
+          "mean": 407.25,
+          "std": 140.11633559296362
+        },
+        "hedge_count": {
+          "mean": 1.95,
+          "std": 1.5321553446044562
+        },
+        "correction_count": {
+          "mean": 1.15,
+          "std": 1.0136567466356645
+        },
+        "qualifier_count": {
+          "mean": 1.85,
+          "std": 1.4239030865898141
+        },
+        "thinking_blocks": {
+          "mean": 0.0,
+          "std": 0.0
+        }
+      },
+      "sentence_thinking": {
+        "sentence_count": {
+          "mean": 7.3,
+          "std": 3.6891733491393435
+        },
+        "word_count": {
+          "mean": 108.3,
+          "std": 39.01807273559267
+        },
+        "hedge_count": {
+          "mean": 0.7,
+          "std": 1.0999999999999999
+        },
+        "correction_count": {
+          "mean": 0.7,
+          "std": 0.714142842854285
+        },
+        "qualifier_count": {
+          "mean": 0.45,
+          "std": 0.8046738469715541
+        },
+        "thinking_blocks": {
+          "mean": 6.1,
+          "std": 1.8411952639521971
+        }
+      }
+    }
+  },
+  "linguistic_features": {
+    "direct": {
+      "hedge_count": {
+        "mean": 0.42272727272727273,
+        "std": 0.8025141279876851
+      },
+      "correction_count": {
+        "mean": 0.36818181818181817,
+        "std": 0.6507941747213474
+      },
+      "qualifier_count": {
+        "mean": 0.6045454545454545,
+        "std": 0.8273601352424649
+      },
+      "word_count": {
+        "mean": 91.5409090909091,
+        "std": 71.85758110881493
+      },
+      "sentence_count": {
+        "mean": 5.904545454545454,
+        "std": 6.073412794731362
+      }
+    },
+    "cot": {
+      "hedge_count": {
+        "mean": 0.5863636363636363,
+        "std": 0.9661523757788626
+      },
+      "correction_count": {
+        "mean": 0.6090909090909091,
+        "std": 0.7458424711261334
+      },
+      "qualifier_count": {
+        "mean": 0.8727272727272727,
+        "std": 1.0234441931678178
+      },
+      "word_count": {
+        "mean": 137.75,
+        "std": 106.04118518078461
+      },
+      "sentence_count": {
+        "mean": 9.654545454545454,
+        "std": 8.894775140125152
+      }
+    },
+    "sentence_thinking": {
+      "hedge_count": {
+        "mean": 0.32727272727272727,
+        "std": 0.6411508248183801
+      },
+      "correction_count": {
+        "mean": 0.38636363636363635,
+        "std": 0.5727092349251888
+      },
+      "qualifier_count": {
+        "mean": 0.5227272727272727,
+        "std": 0.7412715231778301
+      },
+      "word_count": {
+        "mean": 66.52727272727273,
+        "std": 33.06143292580401
+      },
+      "sentence_count": {
+        "mean": 5.122727272727273,
+        "std": 3.8065054145599713
+      }
+    },
+    "mwu_hedge_count_st_vs_direct": {
+      "U": 23239.5,
+      "p": 0.35190695804304417,
+      "cohens_d": -0.13142080403115394
+    },
+    "mwu_correction_count_st_vs_direct": {
+      "U": 25195.0,
+      "p": 0.35937122839154045,
+      "cohens_d": 0.029660567618601554
+    },
+    "mwu_qualifier_count_st_vs_direct": {
+      "U": 23090.5,
+      "p": 0.34378696555865906,
+      "cohens_d": -0.10416115524157624
+    }
+  }
+}

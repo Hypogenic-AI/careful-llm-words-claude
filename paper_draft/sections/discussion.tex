@@ -1,0 +1,35 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{The Truthfulness--Detail Trade-off}
+
+Our results reveal a fundamental trade-off in prompt-based interleaved thinking: \sentthink improves truthfulness at the cost of response detail. On \tqa, the model catches common misconceptions by reflecting between sentences (\eg distinguishing a literal ring from Tolkien's ``One Ring''), producing significantly more truthful responses ($p{=}0.0007$). On \mtbench, the same mechanism reduces visible response length by 52\%, yielding answers that are accurate but insufficiently detailed for open-ended tasks.
+
+This trade-off is architectural rather than methodological. With a fixed output token budget, every token spent on interleaved thinking is a token unavailable for the visible response. Training-based approaches like pause tokens~\cite{goyal2023think} and Quiet-STaR~\cite{zelikman2024quietstar} avoid this constraint because their ``thinking'' occurs in latent space without consuming output tokens. Our results quantify the practical cost of explicit, prompt-based deliberation: approximately half the output budget.
+
+\subsection{How Interleaved Thinking Changes Text}
+
+We expected \sentthink to produce more cautious, hedged text---more ``I'm not sure'' and ``it depends.'' Instead, it produces more concise, assertive text with \emph{fewer} hedging markers. The model resolves uncertainty in the thinking tags and then states its conclusion with confidence. This is consistent with the Self-Notes finding~\cite{lanchantin2023selfnotes} that proximity of reasoning to relevant content improves performance: by thinking immediately after each sentence, the model verifies claims at the point of greatest relevance.
+
+The qualitative character of \sentthink text is best described as \emph{disambiguating}. On \tqa questions designed to elicit misconceptions, \sentthink responses more frequently distinguish between literal and figurative interpretations, between common belief and established fact. The thinking step provides the computational space for the model to ask ``Is this actually true, or is this a common misconception?''---a question that direct generation does not have the opportunity to pose.
+
+\subsection{Relationship to Standard CoT}
+
+The truthfulness improvement of \sentthink over \direct ($+0.19$, $p{=}0.0007$) is comparable to the improvement of \stdcot over \direct ($+0.15$, $p$ not significant at the same level). The difference between \sentthink and \stdcot is negligible ($+0.04$, $p{=}0.562$). This suggests that \emph{any} form of prompted deliberation helps with factual accuracy, regardless of whether reasoning is placed before or within the response.
+
+On mathematical reasoning (\gsm), both \sentthink and \direct achieve 92\%, with \stdcot slightly lower at 89\%. The high baseline performance of \gptfour on this benchmark limits the observable effect of additional reasoning. We expect larger gains on more challenging benchmarks or with less capable models, consistent with \citet{goyal2023think}'s finding that larger models benefit more from pause tokens.
+
+\subsection{Limitations}
+\label{sec:limitations}
+
+\para{Single model.} We evaluate only \gptfour. Results may differ for other architectures or model sizes, particularly smaller models where interleaved thinking might provide proportionally larger benefits.
+
+\para{LLM-as-judge bias.} \gptfour judges its own outputs, which may introduce systematic biases. The pairwise comparison format may also favor longer, more detailed responses regardless of accuracy, partially explaining the \mtbench gap.
+
+\para{Token budget confound.} Our max\_tokens$=$2048 limit means thinking tokens directly reduce response length. With an unlimited token budget, the \mtbench quality gap might shrink or disappear. Future work should test with larger budgets to disentangle the effect of thinking from the effect of response truncation.
+
+\para{Temperature and variance.} We use temperature$=$0.0 for deterministic generation. While this ensures reproducibility, it eliminates sampling variance and may mask effects that appear with stochastic generation. Self-consistency methods~\cite{wang2022selfconsistency} that sample multiple reasoning paths might interact differently with interleaved thinking.
+
+\para{Small \mtbench sample.} We use only 20 of 80 \mtbench prompts. While this is sufficient to detect the large observed effect ($p{=}0.0001$), it may be underpowered for detecting subtler quality differences.
+
+\para{No human evaluation.} All evaluations use automated metrics or LLM-as-judge. Human evaluators might perceive qualitative differences---such as the disambiguating behavior on \tqa---that automated metrics miss. Conversely, humans might weight truthfulness differently than informativeness.

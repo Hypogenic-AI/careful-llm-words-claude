@@ -1,0 +1,18 @@
+\section{Introduction}
+\label{sec:intro}
+
+When humans communicate about complex or high-stakes topics, they naturally pause between sentences to reflect: \emph{Is what I just said accurate? What should I say next?} This self-monitoring produces more careful, truthful communication. Large language models, by contrast, generate text in a single forward pass per token with no built-in opportunity for reflection between sentences. If we could prompt LLMs to deliberate at the sentence level, we might obtain text that is more truthful and internally consistent---qualities critical for medical advice, legal analysis, and education.
+
+Chain-of-thought (CoT) prompting~\cite{wei2022chain} has demonstrated that intermediate reasoning tokens substantially improve LLM performance on multi-step tasks. However, standard CoT places all reasoning \emph{before} the answer, not interleaved within it. Training-based approaches such as pause tokens~\cite{goyal2023think} and Quiet-STaR~\cite{zelikman2024quietstar} show that extra computation inserted \emph{during} generation improves output quality, but these require model retraining. The Self-Notes framework~\cite{lanchantin2023selfnotes} demonstrated that reasoning interleaved near relevant content outperforms post-context reasoning, yet it too requires fine-tuning. A natural question emerges: \textbf{can prompting alone achieve similar benefits by instructing a model to think between every sentence?}
+
+We propose \sentthink, a zero-training prompting technique that instructs an LLM to generate explicit \texttt{[THINKING: ...]} tags between every output sentence. Unlike standard CoT, the deliberation is interleaved with the response itself, allowing the model to fact-check each claim before proceeding to the next. Unlike pause tokens or Quiet-STaR, our approach requires no model modification---only a change in the system prompt.
+
+We evaluate \sentthink on three tasks spanning mathematical reasoning (\gsm), factual truthfulness (\tqa), and open-ended generation quality (\mtbench). Our key finding is a truthfulness--detail trade-off: \sentthink significantly improves truthfulness on \tqa by $+0.19$ points ($p{=}0.0007$) but reduces open-ended quality on \mtbench by 2.4--2.8 points because thinking tokens consume approximately 52\% of the output budget. On \gsm, \sentthink matches direct generation at 92\% accuracy. Surprisingly, the resulting text is \emph{not} more hedged or cautious---it is more concise and assertive, with the deliberation acting as an internal fact-checking filter rather than producing more qualified language.
+
+Our contributions are as follows:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item We propose \sentthink, a prompt-only technique for interleaved sentence-level deliberation that requires no model modification, and systematically evaluate it across reasoning, truthfulness, and open-ended generation tasks.
+    \item We demonstrate that sentence-level thinking significantly improves truthfulness ($p{=}0.0007$, $d{=}0.36$), matching standard CoT while operating at a different granularity.
+    \item We identify the token-budget trade-off as the fundamental limitation of prompt-based interleaved thinking: thinking tokens consume half the output, reducing response detail and open-ended quality.
+    \item We show that interleaved deliberation produces text that is more concise and assertive rather than more hedged---a counterintuitive finding that suggests careful generation manifests as better fact-checking, not more qualification.
+\end{itemize}

@@ -1,0 +1,51 @@
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Prompting Conditions}
+\label{sec:conditions}
+
+We evaluate three prompting conditions that vary in the type and placement of intermediate reasoning:
+
+\para{Direct generation.} The model receives the task prompt with a simple instruction to answer directly. No intermediate reasoning is elicited. This serves as our lower bound.
+
+\para{Standard CoT.} We prepend ``Let's think step by step'' to the task prompt, following the zero-shot CoT approach of \citet{kojima2022large}. All reasoning occurs before the final answer. This is the established strong baseline from the literature.
+
+\para{Sentence-level thinking (\sentthink).} The model is instructed to generate its response sentence by sentence, inserting explicit \texttt{[THINKING: ...]} tags after each sentence. The thinking prompt instructs the model to reflect on three dimensions: (1) whether the preceding sentence is accurate, (2) what should come next, and (3) whether the response is precise and careful. The key distinction from standard CoT is that deliberation is \emph{interleaved} with the response rather than concentrated before it, allowing the model to verify each claim as it is produced. An example of the output format is:
+
+\begin{quote}
+\small
+\texttt{If you put on one ring, nothing unusual will happen---it will simply sit on your finger as a piece of jewelry.}\\[2pt]
+\texttt{[THINKING: This is accurate for ordinary rings; there is no magical effect from wearing a typical ring.]}\\[2pt]
+\texttt{If you are referring to the ``One Ring'' from The Lord of the Rings, then in the story, putting it on makes the wearer invisible.}\\[2pt]
+\texttt{[THINKING: This clarifies the difference between real life and fiction, and addresses the likely source of confusion.]}
+\end{quote}
+
+\subsection{Evaluation Benchmarks}
+\label{sec:benchmarks}
+
+We select three benchmarks that test complementary aspects of generation quality:
+
+\para{\gsm~\cite{cobbe2021training}.} A dataset of 1,319 grade-school math word problems requiring multi-step arithmetic reasoning. We sample 100 questions from the test set (seed$=$42). Evaluation uses exact match on the extracted numeric answer via the standard \texttt{\#\#\#\#} pattern. This benchmark tests whether interleaved thinking improves step-by-step reasoning accuracy.
+
+\para{\tqa~\cite{lin2022truthfulqa}.} A dataset of 817 questions designed to elicit common human misconceptions. We sample 100 questions from the validation set (seed$=$42). Evaluation uses LLM-as-judge scoring (\gptfour) on two dimensions: \emph{truthfulness} (1--5 scale, whether the answer avoids falsehoods) and \emph{informativeness} (1--5 scale, whether the answer provides useful information). The judge receives the question, the model's response, and lists of correct and incorrect reference answers. This benchmark directly measures whether the model is more ``careful'' about factual claims.
+
+\para{\mtbench~\cite{zheng2023judging}.} A set of 80 open-ended prompts spanning diverse categories (writing, reasoning, coding, etc.). We use 20 prompts to evaluate overall response quality. Evaluation uses pairwise LLM-as-judge comparison (\gptfour), scoring each response on a 1--10 scale. This benchmark captures qualitative aspects of generation---detail, thoroughness, helpfulness---that accuracy metrics miss.
+
+\subsection{Linguistic Feature Analysis}
+\label{sec:linguistic}
+
+Beyond task-specific metrics, we analyze the linguistic character of generated text across all conditions. After stripping \texttt{[THINKING: ...]} tags from \sentthink outputs, we compute the following features on the clean text:
+
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item \textbf{Hedging language}: Occurrences of hedging phrases (\eg ``might,'' ``perhaps,'' ``it is possible that'')
+    \item \textbf{Self-correction markers}: Phrases indicating revision (\eg ``actually,'' ``let me correct,'' ``on second thought'')
+    \item \textbf{Qualifiers}: Modifying phrases that soften claims (\eg ``generally,'' ``in most cases,'' ``typically'')
+    \item \textbf{Word and sentence counts}: Overall response length and granularity
+\end{itemize}
+
+These features test whether interleaved thinking produces \emph{qualitatively} different text---specifically, whether the model becomes more cautious in its language choices.
+
+\subsection{Implementation Details}
+\label{sec:implementation}
+
+All experiments use \gptfour via the OpenAI Chat Completions API with temperature$=$0.0 for deterministic generation, max tokens$=$2048, and random seed$=$42. We run a single pass per condition, as temperature 0.0 ensures reproducibility. Statistical comparisons use McNemar's test for binary accuracy (\gsm), Wilcoxon signed-rank test for ordinal scores (\tqa, \mtbench), and Mann-Whitney $U$ test for linguistic features. We report 95\% confidence intervals and Cohen's $d$ effect sizes where applicable. Total execution time was 57.6 minutes across all conditions.

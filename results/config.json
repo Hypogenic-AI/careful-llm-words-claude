@@ -1,0 +1,9 @@
+{
+  "seed": 42,
+  "model": "gpt-4.1",
+  "gsm8k_n": 100,
+  "truthfulqa_n": 100,
+  "mtbench_n": 20,
+  "temperature": 0.0,
+  "timestamp": "2026-03-23T15:39:54.815883"
+}
