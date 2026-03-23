@@ -1,8 +1,8 @@
 idea:
   title: An LLM That's Careful With Its Words
   domain: nlp
-  hypothesis: 'Requiring a chain-of-thought process or inserting explicit thinking
-    tokens between every sentence will cause an LLM to consider each sentence more
+  hypothesis: 'Incorporating chain-of-thought prompting that requires explicit "thinking
+    tokens" between every sentence will cause an LLM to consider each sentence more
     carefully before generating it, resulting in qualitatively different text compared
     to standard generation.
 
@@ -18,8 +18,8 @@ idea:
     author: Ari Holtzman
     source: IdeaHub
     source_url: https://hypogenic.ai/ideahub/idea/QAbWf2FN525tKq4HLs0I
-    idea_id: an_llm_that_s_careful_with_its_20260321_091345_a3cd94ce
-    created_at: '2026-03-21T09:13:45.648929'
+    idea_id: an_llm_that_s_careful_with_its_20260323_151357_a3cd94ce
+    created_at: '2026-03-23T15:13:57.565696'
     status: submitted
     github_repo_name: careful-llm-words-claude
     github_repo_url: https://github.com/Hypogenic-AI/careful-llm-words-claude
